@@ -12,5 +12,5 @@ Common use case: You have a private access website and you want to be sure that 
 
 Another effect of this module is that if a user has multiple tabs open of the same Drupal site, and they log out in one tab, they will be logged out in all tabs.
 
-In order to improve performance, the ajax callback (and associated Drupal boostrap) only runs if the Drupal page is in focus (the active front window). Once a window becomes active it will immediately do an ajax check if the script is overdue.
+In order to improve performance, the ajax callback (and associated Drupal bootstrap) only runs if the Drupal page is in focus (the active front window). Once a window becomes active it will immediately do an ajax check if the script is overdue.
 
