@@ -1,0 +1,61 @@
+<?php
+// $Id$
+
+
+/**
+ * Implementation of hook_menu()
+ */
+function ejectorseat_menu() {
+  $items = array();
+  $items['admin/settings/ejectorseat'] = array(
+    'title' => 'Ejector Seat settings',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ejectorseat_settings'),
+    'access arguments' => array('administer site configuration')
+  );
+  $items['ejectorseat/check'] = array(
+    'page callback' => 'ejectorseat_check',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+/**
+ * Implementation of hook_init()
+ */
+function ejectorseat_init() {
+  global $user;
+  if ($user->uid > 0) {
+    drupal_add_js(array(
+      'ejectorInterval' => variable_get('ejectorseat_interval', 60),
+      'ejectorUrl' => url('ejectorseat/check'),
+    ), 'setting');
+    drupal_add_js(drupal_get_path('module', 'ejectorseat') . '/ejectorseat.js');
+  }
+}
+
+/**
+ * Callback to tell whether user is logged in or not
+ */
+function ejectorseat_check() {
+  global $user;
+  print $user->uid == 0 ? 0 : 1;
+}
+
+/**
+ * Settings form
+ */
+function ejectorseat_settings() {
+  $form = array();
+  $period = drupal_map_assoc(array(15, 30, 60, 120, 180, 300, 600, 1200, 1800, 3600), 'format_interval');
+  $form['ejectorseat_interval'] = array(
+    '#type' => 'select',
+    '#title' => t('Ajax check rate'),
+    '#options' => $period,
+    '#description' => t("How often should the Ejector Seat check to see if a user has been logged out? Lower rates may affect site performance."),
+    '#default_value' => variable_get('ejectorseat_interval', 60),
+  );
+  return system_settings_form($form);
+}
+
