@@ -15,7 +15,8 @@ Drupal.behaviors.ejectorseat = function() {
         restartTimer();
       }
     });
-  var ejectorCheck = function() {
+    
+  function ejectorCheck() {
     if (windowFocus) {
       // do the ajax test
       $.get(Drupal.settings.ejectorUrl, function(data){
@@ -29,12 +30,15 @@ Drupal.behaviors.ejectorseat = function() {
       ejectorOverdue = true;
     }
   }
+  
   function startTimer() {
     intervalId = setInterval(ejectorCheck, ejectorInterval);
   }
+  
   function restartTimer() {
     clearInterval(intervalId);
     startTimer();
   }
+  
   startTimer();
 }
