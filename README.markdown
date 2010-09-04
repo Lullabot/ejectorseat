@@ -1,6 +1,6 @@
 ##Ejector Seat##
 
-A Drupal module to automatically log out users who's session has ended  
+A Drupal module to automatically log out a user whose session has ended  
 by Jeff Robbins / Lullabot  
 - - - - -
 
