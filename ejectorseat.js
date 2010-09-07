@@ -1,23 +1,23 @@
 Drupal.behaviors.ejectorseat = function() {
-  var windowFocus = true;
-  var ejectorOverdue = false;
+  Drupal.ejectorWindowFocus = true;
+  Drupal.ejectorOverdue = false;
   var ejectorInterval = Drupal.settings.ejectorInterval ? Drupal.settings.ejectorInterval * 1000 : 60000;
   var intervalId;
   $(window)
     .blur(function(){
-      windowFocus = false;
+      Drupal.ejectorWindowFocus = false;
     })
     .focus(function(){
-      windowFocus = true;
-      if (ejectorOverdue) {
-        ejectorOverdue = false;
+      Drupal.ejectorWindowFocus = true;
+      if (Drupal.ejectorOverdue) {
+        Drupal.ejectorOverdue = false;
         ejectorCheck();
         restartTimer();
       }
     });
     
   function ejectorCheck() {
-    if (windowFocus) {
+    if (Drupal.ejectorWindowFocus) {
       // do the ajax test
       $.get(Drupal.settings.ejectorUrl, function(data){
         // if data of 0 is returned
@@ -27,7 +27,7 @@ Drupal.behaviors.ejectorseat = function() {
       });
     }
     else {
-      ejectorOverdue = true;
+      Drupal.ejectorOverdue = true;
     }
   }
   
