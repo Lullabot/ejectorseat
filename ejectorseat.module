@@ -28,9 +28,10 @@ function ejectorseat_init() {
   global $user;
   if ($user->uid > 0) {
     drupal_add_js(array(
-      'ejectorInterval' => variable_get('ejectorseat_interval', 60),
-      'ejectorUrl' => url('ejectorseat/check'),
-    ), 'setting');
+    'ejectorSeat' => array(
+      'interval' => variable_get('ejectorseat_interval', 60),
+      'url' => url('ejectorseat/check'),
+    )), 'setting');
     drupal_add_js(drupal_get_path('module', 'ejectorseat') . '/ejectorseat.js');
   }
 }

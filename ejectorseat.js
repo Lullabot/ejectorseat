@@ -1,25 +1,28 @@
 Drupal.behaviors.ejectorseat = function() {
-  Drupal.ejectorWindowFocus = true;
-  Drupal.ejectorOverdue = false;
-  var ejectorInterval = Drupal.settings.ejectorInterval ? Drupal.settings.ejectorInterval * 1000 : 60000;
+  Drupal.ejectorSeat = {
+    windowFocus: true,
+    overdue: false
+  };
+  var ejectorInterval = Drupal.settings.ejectorSeat.interval ? Drupal.settings.ejectorSeat.interval * 1000 : 60000;
   var intervalId;
   $(window)
     .blur(function(){
-      Drupal.ejectorWindowFocus = false;
+      Drupal.ejectorSeat.windowFocus = false;
     })
     .focus(function(){
-      Drupal.ejectorWindowFocus = true;
-      if (Drupal.ejectorOverdue) {
-        Drupal.ejectorOverdue = false;
+      Drupal.ejectorSeat.windowFocus = true;
+      if (Drupal.ejectorSeat.overdue) {
+        Drupal.ejectorSeat.overdue = false;
         ejectorCheck();
         restartTimer();
       }
     });
     
   function ejectorCheck() {
-    if (Drupal.ejectorWindowFocus) {
+    var ignoreFocus = typeof Drupal.settings.ejectorSeat.ignoreFocus == 'null' ? false : Drupal.settings.ejectorSeat.ignoreFocus;
+    if (Drupal.ejectorSeat.windowFocus || ignoreFocus) {
       // do the ajax test
-      $.get(Drupal.settings.ejectorUrl, function(data){
+      $.get(Drupal.settings.ejectorSeat.url, function(data){
         // if data of 0 is returned
         if (data === '0') {
           window.location.reload(true);
@@ -27,7 +30,7 @@ Drupal.behaviors.ejectorseat = function() {
       });
     }
     else {
-      Drupal.ejectorOverdue = true;
+      Drupal.ejectorSeat.overdue = true;
     }
   }
   
