@@ -31,6 +31,7 @@ function ejectorseat_init() {
     'ejectorSeat' => array(
       'interval' => variable_get('ejectorseat_interval', 60),
       'url' => url('ejectorseat/check'),
+      'ignoreFocus' => variable_get('ejectorseat_background', 0) ? TRUE : FALSE,
     )), 'setting');
     drupal_add_js(drupal_get_path('module', 'ejectorseat') . '/ejectorseat.js');
   }
@@ -56,6 +57,15 @@ function ejectorseat_settings() {
     '#options' => $period,
     '#description' => t("How often should the Ejector Seat check to see if a user has been logged out? Lower rates may affect site performance."),
     '#default_value' => variable_get('ejectorseat_interval', 60),
+  );
+  $form['ejectorseat_background'] = array(
+    '#type' => 'radios',
+    '#title' => t('Run ajax check in background'),
+    '#options' => array(
+      0 => t('<strong>FALSE:</strong> Only run the ajax check when the browser window or tab is active. (better performance)'),
+      1 => t('<strong>TRUE:</strong> Run the ajax check even if the browser window or tab is in the background. (better security, CONSIDERABLY worse performance)'),
+    ),
+    '#default_value' => variable_get('ejectorseat_background', 0),
   );
   return system_settings_form($form);
 }

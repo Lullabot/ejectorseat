@@ -19,7 +19,7 @@ Drupal.behaviors.ejectorseat = function() {
     });
     
   function ejectorCheck() {
-    var ignoreFocus = typeof Drupal.settings.ejectorSeat.ignoreFocus == 'null' ? false : Drupal.settings.ejectorSeat.ignoreFocus;
+    var ignoreFocus = Drupal.settings.ejectorSeat.ignoreFocus;
     if (Drupal.ejectorSeat.windowFocus || ignoreFocus) {
       // do the ajax test
       $.get(Drupal.settings.ejectorSeat.url, function(data){
