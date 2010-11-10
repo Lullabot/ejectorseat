@@ -26,7 +26,7 @@ function ejectorseat_menu() {
  */
 function ejectorseat_init() {
   global $user;
-  if ($user->uid > 0) {
+  if ($user->uid > 0 && (int)variable_get('ejectorseat_interval', 60)) {
     drupal_add_js(array(
     'ejectorSeat' => array(
       'interval' => variable_get('ejectorseat_interval', 60),
@@ -50,7 +50,7 @@ function ejectorseat_check() {
  */
 function ejectorseat_settings() {
   $form = array();
-  $period = drupal_map_assoc(array(15, 30, 60, 120, 180, 300, 600, 1200, 1800, 3600), 'format_interval');
+  $period = array(0 => t('disable')) + drupal_map_assoc(array(15, 30, 60, 120, 180, 300, 600, 1200, 1800, 3600), 'format_interval');
   $form['ejectorseat_interval'] = array(
     '#type' => 'select',
     '#title' => t('Ajax check rate'),
