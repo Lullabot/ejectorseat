@@ -1,0 +1,13 @@
+<?php
+/**
+ * @file
+ * Installation and cleanup tasks for Ejector Seat.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function ejectorseat_uninstall() {
+  variable_del('ejectorseat_interval');
+  variable_del('ejectorseat_background');
+}
