@@ -1,9 +1,12 @@
 <?php
-// $Id$
-
+/**
+ * @file
+ * Reloads the current page if a user's session has ended, logging them out,
+ * and ejecting them from the site.
+ */
 
 /**
- * Implementation of hook_menu()
+ * Implements hook_menu().
  */
 function ejectorseat_menu() {
   $items = array();
@@ -22,7 +25,7 @@ function ejectorseat_menu() {
 }
 
 /**
- * Implementation of hook_init()
+ * Implements hook_init().
  */
 function ejectorseat_init() {
   global $user;
@@ -38,7 +41,11 @@ function ejectorseat_init() {
 }
 
 /**
- * Callback to tell whether user is logged in or not
+ * Callback to check whether a user is logged in or not.
+ *
+ * Intended to be the target of an AJAX request. This callback prints out the
+ * integer 0 if the user accessing the site is anonymous and 1 if the user is
+ * logged in.
  */
 function ejectorseat_check() {
   global $user;
@@ -46,27 +53,26 @@ function ejectorseat_check() {
 }
 
 /**
- * Settings form
+ * Form Builder; Admin settings form.
  */
 function ejectorseat_settings() {
   $form = array();
   $period = array(0 => t('disable')) + drupal_map_assoc(array(15, 30, 60, 120, 180, 300, 600, 1200, 1800, 3600), 'format_interval');
   $form['ejectorseat_interval'] = array(
     '#type' => 'select',
-    '#title' => t('Ajax check rate'),
+    '#title' => t('AJAX check rate'),
     '#options' => $period,
-    '#description' => t("How often should the Ejector Seat check to see if a user has been logged out? Lower rates may affect site performance."),
+    '#description' => t("How often should Ejector Seat check to see if a user has been logged out? Lower rates may affect site performance."),
     '#default_value' => variable_get('ejectorseat_interval', 60),
   );
   $form['ejectorseat_background'] = array(
     '#type' => 'radios',
-    '#title' => t('Run ajax check in background'),
+    '#title' => t('Run AJAX check in background'),
     '#options' => array(
-      0 => t('<strong>FALSE:</strong> Only run the ajax check when the browser window or tab is active. (better performance)'),
-      1 => t('<strong>TRUE:</strong> Run the ajax check even if the browser window or tab is in the background. (better security, CONSIDERABLY worse performance)'),
+      0 => t('<strong>FALSE:</strong> Only run the AJAX check when the browser window or tab is active. (better performance)'),
+      1 => t('<strong>TRUE:</strong> Run the AJAX check even if the browser window or tab is in the background. (better security, CONSIDERABLY worse performance)'),
     ),
     '#default_value' => variable_get('ejectorseat_background', 0),
   );
   return system_settings_form($form);
 }
-

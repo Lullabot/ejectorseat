@@ -1,3 +1,11 @@
+/**
+ * @file
+ * Ejector seat Javascript functions.
+ *
+ * Poll a Drupal site via AJAX at a specified interval to determine if the user
+ * currently accessing the site still has an active session and reload the page
+ * if they don not. Effectively logging the user out of the site.
+ */
 Drupal.behaviors.ejectorseat = function() {
   Drupal.ejectorSeat = {
     windowFocus: true,
@@ -17,13 +25,15 @@ Drupal.behaviors.ejectorseat = function() {
         restartTimer();
       }
     });
-    
+
   function ejectorCheck() {
     var ignoreFocus = Drupal.settings.ejectorSeat.ignoreFocus;
+        
     if (Drupal.ejectorSeat.windowFocus || ignoreFocus) {
-      // do the ajax test
+      // Do the AJAX test.
       $.get(Drupal.settings.ejectorSeat.url, function(data){
-        // if data of 0 is returned
+        // If the test returns 0 the user's session has ended so refresh the
+        // page.
         if (data === '0') {
           window.location.reload(true);
         }
@@ -33,15 +43,15 @@ Drupal.behaviors.ejectorseat = function() {
       Drupal.ejectorSeat.overdue = true;
     }
   }
-  
+
   function startTimer() {
     intervalId = setInterval(ejectorCheck, ejectorInterval);
   }
-  
+
   function restartTimer() {
     clearInterval(intervalId);
     startTimer();
   }
-  
+
   startTimer();
 }
