@@ -10,11 +10,11 @@
  */
 function ejectorseat_menu() {
   $items = array();
-  $items['admin/settings/ejectorseat'] = array(
+  $items['admin/config/ejectorseat'] = array(
     'title' => 'Ejector Seat settings',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('ejectorseat_settings'),
-    'access arguments' => array('administer site configuration')
+    'access arguments' => array('administer site configuration'),
   );
   $items['ejectorseat/check'] = array(
     'page callback' => 'ejectorseat_check',
@@ -29,13 +29,14 @@ function ejectorseat_menu() {
  */
 function ejectorseat_init() {
   global $user;
-  if ($user->uid > 0 && (int)variable_get('ejectorseat_interval', 60)) {
+  if ($user->uid > 0 && (int) variable_get('ejectorseat_interval', 60)) {
     drupal_add_js(array(
-    'ejectorSeat' => array(
-      'interval' => variable_get('ejectorseat_interval', 60),
-      'url' => url('ejectorseat/check'),
-      'ignoreFocus' => variable_get('ejectorseat_background', 0) ? TRUE : FALSE,
-    )), 'setting');
+      'ejectorSeat' => array(
+        'interval' => variable_get('ejectorseat_interval', 60),
+        'url' => url('ejectorseat/check'),
+        'ignoreFocus' => variable_get('ejectorseat_background', 0) ? TRUE : FALSE,
+      ),
+    ), array('type' => 'setting', 'scope' => JS_DEFAULT));
     drupal_add_js(drupal_get_path('module', 'ejectorseat') . '/ejectorseat.js');
   }
 }
@@ -55,7 +56,7 @@ function ejectorseat_check() {
 /**
  * Form Builder; Admin settings form.
  */
-function ejectorseat_settings() {
+function ejectorseat_settings($form, &$form_state) {
   $form = array();
   $period = array(0 => t('disable')) + drupal_map_assoc(array(15, 30, 60, 120, 180, 300, 600, 1200, 1800, 3600), 'format_interval');
   $form['ejectorseat_interval'] = array(
